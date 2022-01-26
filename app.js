@@ -1,36 +1,42 @@
-// 순서도 그리기 중요!
-// number, order 값 제대로 못 받은 이유: parseInt로 감싸주는 거 잊지 말기!
-
-const $order = document.querySelector("#order");
-const $word = document.querySelector("#word");
+const $order = document.querySelector(".order");
+const $word = document.querySelector(".word");
+const $form = document.querySelector("form");
 const $input = document.querySelector("input");
 const $btn = document.querySelector("button");
+const number = prompt("몇 명이 참여하나요?", "2명");
 
-const number = parseInt(prompt('몇 명이 참가하나요?'));
+if(number === null){
+  alert("참가자 수를 적어주세요!");
+  prompt("몇 명이 참여하나요?", "2명");
+  // prompt창에 인원 수 입력할 때까지 alert 반복해서 띄어줌
+}
 
-let word; // 제시어
-let newWord; // 새로 입력한 단어
+let word;
+let newWord;
 
-const onClick = () => {
-    if(!word || word[word.length - 1] === newWord[0]) { 
-        word = newWord;
-        $word.innerText = word;
-        const order = parseInt($order.innerText);
-        if(order + 1 > number) {
-            $order.innerText = 1;
-        } else {
-            $order.innerText = order + 1;
-        }
-        $input.value = "";
-        $input.focus();
+const handleSubmit = (e) => {
+  e.preventDefault();
+  
+  if(!word || word.substr(-1, 1) === newWord && newWord.lenght === 3 ){
+    word = newWord;
+    $word.innerText = word;
+    
+    const order = parseInt($order.innerText);
+    if(order >= parseInt(number)){
+        $order.innerText = 1;
     } else {
-        alert('올바른 단어를 입력하세요!');
+        $order.innerText = order + 1;
     }
+  } else {
+    alert("세글자를 가진 올바른 단어를 입력하세요!");
+  }
+  $input.value = "";
+  $input.focus();
 }
 
-const onInput = (e) => {
-    newWord = e.target.value;
+const handleInput = (e) => {
+  newWord = e.target.value;
 }
 
-$btn.addEventListener("click", onClick);
-$input.addEventListener("input", onInput);
+$form.addEventListener("submit", handleSubmit);
+$input.addEventListener("input", handleInput);
